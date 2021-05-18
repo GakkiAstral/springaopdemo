@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--配置目标对象-->
+    <bean id="usersService" class="com.bjsxt.service.impl.UsersServiceImpl"/>
+
+    <!--配置切面对象-->
+    <bean id="myAspect" class="com.bjsxt.aop.MyAspect"/>
+    <bean id="toUppercaseAspect" class="com.bjsxt.aop.ToUppercaseAspect"/>
+
+    <!--配置切面-->
+    <bean id="usersServiceProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <!--配置目标对象所实现的接口-->
+        <property name="proxyInterfaces" value="com.bjsxt.service.UsersService"/>
+        <!--配置目标对象-->
+        <property name="target" ref="usersService"/>
+        <!--配置切面对象-->
+        <property name="interceptorNames">
+            <list>
+                <!--<value>myAspect</value>-->
+                <value>toUppercaseAspect</value>
+            </list>
+        </property>
+        <!--如何生成代理对象,true表示使用CGLIB,false表时使用JDK的Proxy-->
+        <property name="proxyTargetClass" value="true"/>
+    </bean>
+</beans>
